@@ -122,6 +122,44 @@
         color: #cfeff0;
         opacity: 0.9;
       }
+      /* Gallery styles */
+      .gallery {
+        width: 80%;
+        max-width: 900px;
+        margin: 20px 0 40px 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        align-items: stretch;
+      }
+
+      .gallery-item {
+        overflow: hidden;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.02);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.03);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.25s ease;
+        cursor: pointer;
+      }
+
+      .gallery-item img:hover { transform: scale(1.03); }
+
+      /* lightbox overlay */
+      .lb-overlay {
+        position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.85); z-index: 9999; padding: 20px;
+      }
+      .lb-overlay.open { display: flex; }
+      .lb-overlay img { max-width: 95%; max-height: 90%; border-radius: 6px; box-shadow: 0 12px 48px rgba(0,0,0,0.6); }
+      .lb-caption { margin-top: 10px; color: #dff; text-align:center; }
     </style>
   </head>
   <body>
@@ -153,7 +191,64 @@
 
 
 
-  <div class="text-box">
+  
+
+  <!-- Image gallery: drop images into ./images/01.jpg .. 04.jpg -->
+  <section class="gallery" aria-label="Galerie">
+    <figure class="gallery-item"><img src="hammerbrook.jpg" alt="Bild 1" data-caption="Ansicht 1"></figure>
+    <figure class="gallery-item"><img src="hammerbrook.png" alt="Bild 2" data-caption="Ansicht 2"></figure>
+  </section>
+
+  <div id="lb" class="lb-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div>
+      <img id="lb-img" src="" alt="">
+      <div style="display:flex; gap:8px; justify-content:center; margin-top:10px;">
+        <button class="btn" id="lb-back">Zurück</button>
+      </div>
+      <div class="lb-caption" id="lb-caption"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const overlay = document.getElementById('lb');
+      const lbImg = document.getElementById('lb-img');
+      const lbCaption = document.getElementById('lb-caption');
+      const lbBack = document.getElementById('lb-back');
+      let lastThumb = null;
+
+      document.querySelectorAll('.gallery-item img').forEach(img=>{
+        img.addEventListener('click', ()=>{
+          lastThumb = img; // remember clicked thumbnail
+          lbImg.src = img.src;
+          lbImg.alt = img.alt || '';
+          lbCaption.textContent = img.dataset.caption || img.alt || '';
+          overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+          // focus close/back for accessibility
+          lbBack.focus();
+        });
+      });
+
+      overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeLB(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLB(); });
+
+      lbBack?.addEventListener('click', ()=>{
+        // close and scroll/focus thumbnail
+        closeLB();
+        if(lastThumb){
+          lastThumb.scrollIntoView({behavior:'smooth', block:'center'});
+          lastThumb.focus({preventScroll:true});
+        }
+      });
+
+      function closeLB(){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); lbImg.src=''; }
+    })();
+  </script>
+
+
+
+
+<div class="text-box">
 
   <p>Dieses 3D-Projekt entstand in Blender und verbindet verschiedene Zeitebenen miteinander. Ausgangspunkt war das klassische Wikingerschiff, ein Symbol für Reisen, Erkundung und kulturelle Identität. Dieses historische Element habe ich bewusst in die moderne S bahn Station Hammerbrook integriert, um es in den Kontext der Gegenwart zu stellen.</p>
 
@@ -167,7 +262,7 @@
 
 </div>
 
-  
+
 
 </body>
 </html>
