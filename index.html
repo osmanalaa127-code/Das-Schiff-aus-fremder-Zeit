@@ -155,11 +155,43 @@
       /* lightbox overlay */
       .lb-overlay {
         position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-        background: rgba(0,0,0,0.85); z-index: 9999; padding: 20px;
+        background: rgba(0,0,0,0.6); z-index: 9999; padding: 20px;
       }
       .lb-overlay.open { display: flex; }
-      .lb-overlay img { max-width: 95%; max-height: 90%; border-radius: 6px; box-shadow: 0 12px 48px rgba(0,0,0,0.6); }
-      .lb-caption { margin-top: 10px; color: #dff; text-align:center; }
+
+      .lb-window {
+        width: min(920px, 96%);
+        background: linear-gradient(180deg, rgba(18,20,22,0.98), rgba(32,36,40,0.98));
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      .lb-window img {
+        max-width: 100%;
+        max-height: calc(80vh - 120px);
+        border-radius: 6px;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+        object-fit: contain;
+      }
+
+      .lb-caption { margin-top: 12px; color: #dff; text-align:center; }
+
+      .lb-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -195,16 +227,14 @@
 
   <!-- Image gallery: drop images into ./images/01.jpg .. 04.jpg -->
   <section class="gallery" aria-label="Galerie">
-    <figure class="gallery-item"><img src="hammerbrook.jpg" alt="Bild 1" data-caption="Ansicht 1"></figure>
-    <figure class="gallery-item"><img src="hammerbrook.png" alt="Bild 2" data-caption="Ansicht 2"></figure>
+    <figure class="gallery-item"><img src="hammerbrook.jpg"  ></figure>
+    <figure class="gallery-item"><img src="hammerbrook.png" ></figure>
   </section>
 
   <div id="lb" class="lb-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div>
+    <div class="lb-window" role="document">
+      <button class="lb-close btn" id="lb-close">X</button>
       <img id="lb-img" src="" alt="">
-      <div style="display:flex; gap:8px; justify-content:center; margin-top:10px;">
-        <button class="btn" id="lb-back">Zurück</button>
-      </div>
       <div class="lb-caption" id="lb-caption"></div>
     </div>
   </div>
@@ -213,33 +243,25 @@
     (function(){
       const overlay = document.getElementById('lb');
       const lbImg = document.getElementById('lb-img');
-      const lbCaption = document.getElementById('lb-caption');
-      const lbBack = document.getElementById('lb-back');
-      let lastThumb = null;
+  const lbCaption = document.getElementById('lb-caption');
+  const lbCloseBtn = document.getElementById('lb-close');
 
       document.querySelectorAll('.gallery-item img').forEach(img=>{
         img.addEventListener('click', ()=>{
-          lastThumb = img; // remember clicked thumbnail
           lbImg.src = img.src;
           lbImg.alt = img.alt || '';
           lbCaption.textContent = img.dataset.caption || img.alt || '';
           overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
-          // focus close/back for accessibility
-          lbBack.focus();
+          // focus close button for accessibility
+          lbCloseBtn?.focus();
         });
       });
 
-      overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeLB(); });
+  // close when clicking outside the modal window
+  overlay.addEventListener('click', (e)=>{ if(!e.target.closest('.lb-window')) closeLB(); });
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLB(); });
 
-      lbBack?.addEventListener('click', ()=>{
-        // close and scroll/focus thumbnail
-        closeLB();
-        if(lastThumb){
-          lastThumb.scrollIntoView({behavior:'smooth', block:'center'});
-          lastThumb.focus({preventScroll:true});
-        }
-      });
+  lbCloseBtn?.addEventListener('click', ()=>{ closeLB(); });
 
       function closeLB(){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); lbImg.src=''; }
     })();
