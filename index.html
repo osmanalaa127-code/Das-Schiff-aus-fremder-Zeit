@@ -77,6 +77,44 @@
         box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.15);
       }
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+      /* Video styling */
+      .video-wrapper {
+        width: 80%;
+        max-width: 900px;
+        margin: 12px 0 24px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(120deg, rgba(35,37,38,0.25) 0%, rgba(31,38,135,0.08) 100%);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.04);
+      }
+
+      .video-wrapper h3 {
+        color: #00fff7;
+        margin: 0 0 12px 0;
+        font-family: 'Orbitron', 'Segoe UI', 'Arial', sans-serif;
+        letter-spacing: 1px;
+      }
+
+      .project-video {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        background: #000;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+        outline: none;
+      }
+
+      .video-caption {
+        margin-top: 8px;
+        font-size: 0.95rem;
+        color: #cfeff0;
+        opacity: 0.9;
+      }
     </style>
   </head>
   <body>
@@ -105,9 +143,18 @@
 
   <p>Durch diese Kombination entsteht ein surrealer, traumartiger Eindruck, der die Grenzen zwischen Zeiten, Orten und Realitäten auflöst. Das Projekt lädt dazu ein, über die eigene Verortung in der Zeit nachzudenken und darüber, wie stark Vergangenheit und Zukunft in unserer Gegenwart präsent sind.</p>
 
-  <p>Das Modell bricht jedoch bewusst mit den traditionellen Vorstellungen. Der Schiffsrumpf wirkt organisch und verändert sich, als würde er wachsen oder sich im Traum verformen. Statt klarer Holzstrukturen finden sich fließende Formen, ungewöhnliche Materialien und verfremdete Details. So wird das Schiff zu einer Art Traumwesen, das zwischen Realität und Fantasie existiert.</p> <a href="mailto:
+  <p>Das Modell bricht jedoch bewusst mit den traditionellen Vorstellungen. Der Schiffsrumpf wirkt organisch und verändert sich, als würde er wachsen oder sich im Traum verformen. Statt klarer Holzstrukturen finden sich fließende Formen, ungewöhnliche Materialien und verfremdete Details. So wird das Schiff zu einer Art Traumwesen, das zwischen Realität und Fantasie existiert.</p>
+
 </div>
 
+  <div class="video-wrapper" aria-label="Projektvideo">
+    <h3>Projekt-Video</h3>
+    <video class="project-video" controls playsinline preload="metadata">
+      <source src="Schiff video-re.mp4" type="video/mp4">
+      Dein Browser unterstützt das Video-Tag nicht. Du kannst das Video hier herunterladen: <a href="Schiff video-re.mp4">Schiff video-re.mp4</a>
+    </video>
+    <div class="video-caption">Kurzes Making-of / Präsentation des Schiffs. Falls das Video nicht startet, bitte die Datei im gleichen Ordner überprüfen.</div>
+  </div>
 
 </body>
 </html>
